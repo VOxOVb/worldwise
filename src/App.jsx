@@ -16,7 +16,6 @@ function App() {
     <CitiesProvider>
       <BrowserRouter>
         <Routes>
-          {/* <Route path="/" element={<Homepage />} /> */}
           <Route index element={<Homepage />} />
           <Route path="product" element={<Product />} />
           <Route path="pricing" element={<Pricing />} />
@@ -31,7 +30,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
-    </CitiesProvider>
+    </CitiesProvider> 
   );
 }
 
