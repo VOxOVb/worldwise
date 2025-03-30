@@ -10,6 +10,8 @@ import ButtonBack from "./ButtonBack";
 import Spinner from "./Spinner";
 import Message from "./Message";
 import { useUrlPoisition } from "../hooks/useUrlPoisition";
+import { useCities } from "../contexts/CitiesContext";
+import { useNavigate } from "react-router-dom";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -22,13 +24,15 @@ export function convertToEmoji(countryCode) {
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 function Form() {
+  const [lat, lng] = useUrlPoisition();
+  const { createCity, isLoading } = useCities();
+  const navigate = useNavigate();
   const [isLoadingGeocoding, setIsLoadingGeocoding] = useState(false);
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
   const [emoji, setEmoji] = useState("");
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
-  const [lat, lng] = useUrlPoisition();
   const [geocodingError, setGeocodingError] = useState("");
   useEffect(() => {
     if (!lat && !lng) return;
@@ -54,7 +58,7 @@ function Form() {
     detchCityData();
   }, [lat, lng]);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!cityName || !date) return;
     const newCity = {
@@ -65,7 +69,8 @@ function Form() {
       notes,
       position: { lat, lng },
     };
-    console.log(newCity);
+    await createCity(newCity);
+    navigate("/app/cities");
   }
 
   if (!lat && !lng)
@@ -74,7 +79,10 @@ function Form() {
   if (geocodingError) return <Message message={geocodingError} />;
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form
+      className={`${styles.form} ${isLoading ? styles.loading : ""}`}
+      onSubmit={handleSubmit}
+    >
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
@@ -87,11 +95,6 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        {/* <input
-          id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
-        /> */}
         <DatePicker
           id="date"
           onChange={(date) => setDate(date)}
