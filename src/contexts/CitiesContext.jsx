@@ -46,7 +46,7 @@ function reducer(state, action) {
       return { ...state, error: action.payload };
 
     default:
-      throw new Error("unknown acction type");
+      throw new Error("unknown action type");
   }
 }
 
