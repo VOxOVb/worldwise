@@ -30,18 +30,10 @@
 
 ### 💻 安裝與啟動
 
-#### 線上
-
-```bash
-https://meowmastery.netlify.app/
-```
-
-#### 本地
-
 1. clone 此專案：
 
 ```bash
-git clone https://github.com/VOxOVb/meowmastery.git
+git clone https://github.com/VOxOVb/worldwise.git
 ```
 
 2. 安裝依賴:
